@@ -80,7 +80,9 @@ async function seedDatabase() {
                 }
             }
 
-            await insertedBook.save();
+            // Update the book status based on the borrowedBy count
+            insertedBook.status = insertedBook.borrowedBy.length === insertedBook.numberOfCopies ? 'BORROWED' : 'AVAILABLE';
+            await insertedBook.save(); // Save updated book
             books.push(insertedBook);
         }
         console.log(`${books.length} books inserted`);
@@ -99,10 +101,10 @@ async function seedDatabase() {
                     const existingHistoryEntry = member.history.filter(entry => entry.bookId.equals(borrowedBookId));
                     if (existingHistoryEntry.length == 0) {
                         member.history.push({
-                        bookId: borrowedBookId,
-                        action: 'BORROWED',
-                        date: borrowDate
-                    });
+                            bookId: borrowedBookId,
+                            action: 'BORROWED',
+                            date: borrowDate
+                        });
                     }
                 }
 
@@ -165,6 +167,8 @@ async function seedDatabase() {
                     const book = await Book.findById(bookId);
                     if (book) {
                         book.borrowedBy = book.borrowedBy.filter(borrowerId => !borrowerId.equals(member._id));
+                        // Update the book status
+                        book.status = book.borrowedBy.length === book.numberOfCopies ? 'BORROWED' : 'AVAILABLE';
                         await book.save(); // Save updated book
                     }
                 }
@@ -190,7 +194,6 @@ async function seedDatabase() {
         await User.insertMany(users);
         console.log(`${users.length} users inserted`);
 
-        // Add all members to User collection as members
         // Add all members to User collection as members
         const memberUsers = await Promise.all(members.map(async (member) => ({
             username: member.username,
