@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const Book = require('../models/books'); 
 const Member = require('../models/members'); 
-const User = require('../models/users'); 
 const bcrypt = require('bcryptjs');
 
 async function seedDatabase() {
@@ -15,13 +14,30 @@ async function seedDatabase() {
         const collectionNames = collections.map(col => col.name);
 
         // Drop collections if they exist
-        const collectionsToDrop = ['books', 'members', 'users'];
+        const collectionsToDrop = ['books', 'members'];
         for (const collection of collectionsToDrop) {
             if (collectionNames.includes(collection)) {
                 await mongoose.connection.db.dropCollection(collection);
                 console.log(`${collection.charAt(0).toUpperCase() + collection.slice(1)} collection dropped`);
             }
         }
+
+        // Seed Librarians collection
+        console.log('Seeding Librarians collection...');
+        const librariansToSeed = [];
+        for (let i = 1; i <= 5; i++) { // Change the number of librarians as needed
+            librariansToSeed.push({
+                username: `librarian${i}`,
+                password: await bcrypt.hash('librarianPassword', 10),
+                email: `librarian${i}@example.com`,
+                borrowedBooks: [],
+                history: [],
+                isActive: true,
+                role: 'LIBRARIAN' // Set the role for each member
+            });
+        }
+        const librarians = await Member.insertMany(librariansToSeed);
+        console.log(`${librarians.length} librarians inserted`);
 
         // Seed Members collection
         console.log('Seeding Members collection...');
@@ -33,7 +49,8 @@ async function seedDatabase() {
                 email: `member${i}@example.com`,
                 borrowedBooks: [],
                 history: [],
-                isActive: true
+                isActive: true,
+                role: 'MEMBER' // Set the role for each member
             });
         }
         const members = await Member.insertMany(membersToSeed);
@@ -175,33 +192,6 @@ async function seedDatabase() {
             }
             await member.save(); // Save updated member
         }
-
-        // Seed Users collection (Librarians and Members)
-        console.log('Seeding Users collection...');
-        const users = [];
-        users.push({
-            username: 'librarian1',
-            password: await bcrypt.hash('librarianPassword', 10),
-            role: 'LIBRARIAN'
-        });
-        for (let i = 1; i <= 10; i++) {
-            users.push({
-                username: `memberUser${i}`,
-                password: await bcrypt.hash('memberPassword', 10), 
-                role: 'MEMBER'
-            });
-        }
-        await User.insertMany(users);
-        console.log(`${users.length} users inserted`);
-
-        // Add all members to User collection as members
-        const memberUsers = await Promise.all(members.map(async (member) => ({
-            username: member.username,
-            password: await bcrypt.hash(member.password, 10), // Hash the password correctly
-            role: 'MEMBER'
-        })));
-        await User.insertMany(memberUsers);
-        console.log(`${memberUsers.length} member users inserted`);
 
     } catch (error) {
         console.error('Error during seeding:', error.message);

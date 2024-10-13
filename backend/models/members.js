@@ -10,7 +10,8 @@ const MemberSchema = new mongoose.Schema({
         action: { type: String, enum: ['BORROWED', 'RETURNED'] },
         date: { type: Date, default: Date.now }
     }],
-    isActive: { type: Boolean, default: true }
+    isActive: { type: Boolean, default: true },
+    role: { type: String, enum: ['LIBRARIAN', 'MEMBER'], required: true }
 });
 
 module.exports = mongoose.model('members', MemberSchema);
