@@ -11,6 +11,7 @@ async function borrowBook(bookId) {
         const data = await response.json();
         if (response.ok) {
             alert(`You have borrowed the book: ${data.title}`);
+            location.reload(); // Reload the page after borrowing
         } else {
             alert(data.msg || 'Failed to borrow the book.');
         }
@@ -33,6 +34,7 @@ async function returnBook(bookId) {
         const data = await response.json();
         if (response.ok) {
             alert(`You have returned the book: ${data.title}`);
+            location.reload(); // Reload the page after returning
         } else {
             alert(data.msg || 'Failed to return the book.');
         }
