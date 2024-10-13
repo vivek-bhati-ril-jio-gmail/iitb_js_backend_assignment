@@ -1,18 +1,32 @@
 const apiUrl = 'http://localhost:5000/api/books'; // Update with your API endpoint
 let currentPage = 1;
-let itemsPerPage = 5; // Default value
+let itemsPerPage = 10; // Default value
 
 async function fetchBooks(page, limit) {
-    const response = await fetch(`${apiUrl}?page=${page}&limit=${limit}`);
-    if (!response.ok) {
-        console.error('Error fetching books:', response.statusText);
-        return [];
+    try {
+        const response = await fetch(`${apiUrl}?page=${page}&limit=${limit}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': localStorage.getItem('jwt')
+            }
+        });
+        
+        if (response.ok) {
+            return response.json();
+        } else {
+            alert(`Please try again later.`);
+            window.history.back();
+        }
+    } catch (error) {
+        console.error('Error fetching books:', error);
+        alert('An error occurred. Please try again later.');
+        window.history.back();
     }
-    return await response.json();
 }
 
 async function loadBooks() {
-    const books = await fetchBooks(currentPage, itemsPerPage);
+    const { totalBooks, totalPages, books } = await fetchBooks(currentPage, itemsPerPage);
     const bookList = document.getElementById('book-list');
     bookList.innerHTML = ''; // Clear existing books
 
@@ -23,18 +37,18 @@ async function loadBooks() {
         bookList.appendChild(bookItem);
     });
 
-    updatePagination();
+    updatePagination(totalPages);
 }
 
-function updatePagination() {
+function updatePagination(totalPages) {
     const pageInfo = document.getElementById('page-info');
-    pageInfo.innerText = `Page ${currentPage}`;
+    pageInfo.innerText = `Page ${currentPage} of ${totalPages}`;
 
     const prevBtn = document.getElementById('prev-btn');
     const nextBtn = document.getElementById('next-btn');
 
     prevBtn.disabled = currentPage === 1;
-    // You may want to set nextBtn disabled based on total pages
+    nextBtn.disabled = currentPage === totalPages; // Disable if on the last page
 }
 
 document.getElementById('prev-btn').addEventListener('click', () => {

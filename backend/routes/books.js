@@ -39,11 +39,23 @@ router.delete('/:id', auth, async (req, res) => {
     }
 });
 
-// View All Books
-router.get('/', async (req, res) => {
+// View All Books with Pagination
+router.get('/', auth, async (req, res) => {
+    const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+    const limit = parseInt(req.query.limit) || 10; // Default to limit of 10 if not provided
+
+    const skip = (page - 1) * limit; // Calculate the number of records to skip
+
     try {
-        const books = await Book.find();
-        res.json(books);
+        const books = await Book.find().skip(skip).limit(limit);
+        const totalBooks = await Book.countDocuments(); // Get the total number of books
+
+        res.json({
+            totalBooks,
+            totalPages: Math.ceil(totalBooks / limit),
+            currentPage: page,
+            books,
+        });
     } catch (err) {
         res.status(500).json({ msg: 'Error fetching books' });
     }
