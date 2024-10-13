@@ -63,7 +63,7 @@ router.get('/', auth, async (req, res) => {
 
 // Borrow a Book (Member Only)
 router.post('/borrow/:bookId', auth, async (req, res) => {
-    const bookId = req.params;
+    const bookId = req.params.bookId;
     const memberId = req.user.id;
 
     try {
@@ -89,7 +89,7 @@ router.post('/borrow/:bookId', auth, async (req, res) => {
         member.history.push({ bookId, action: 'BORROWED' });
         await member.save();
 
-        res.json({ msg: 'Book borrowed', book });
+        res.json({ msg: 'Book borrowed', title: book.title });
     } catch (err) {
         res.status(500).json({ msg: 'Error borrowing book' });
     }

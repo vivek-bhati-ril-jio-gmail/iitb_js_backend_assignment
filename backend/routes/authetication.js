@@ -63,5 +63,12 @@ router.post('/login', async (req, res) => {
     }
 });
 
+// Logout route
+router.post('/logout', (req, res) => {
+    // Here you would typically invalidate the token, if needed
+    // Since JWT is stateless, just inform the client to remove the token
+    res.json({ msg: 'Successfully logged out' });
+});
+
 
 module.exports = router;

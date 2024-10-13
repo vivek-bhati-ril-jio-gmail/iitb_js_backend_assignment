@@ -11,7 +11,7 @@ async function fetchBooks(page, limit) {
                 'x-auth-token': localStorage.getItem('jwt')
             }
         });
-        
+
         if (response.ok) {
             return response.json();
         } else {
@@ -25,15 +25,42 @@ async function fetchBooks(page, limit) {
     }
 }
 
+async function borrowBook(bookId) {
+    try {
+        const response = await fetch(`${apiUrl}/borrow/${bookId}`, { // Adjust the URL for borrowing a book
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': localStorage.getItem('jwt')
+            }
+        });
+
+        const data = await response.json();
+        if (response.ok) {
+            alert(`You have borrowed the book: ${data.title}`);
+            window.location.reload(); // Reload the page to refresh the book list
+        } else {
+            alert(data.msg || 'Failed to borrow the book.');
+        }
+    } catch (error) {
+        console.error('Error borrowing book:', error);
+        alert('An error occurred while borrowing the book. Please try again later.');
+    }
+}
+
 async function loadBooks() {
     const { totalBooks, totalPages, books } = await fetchBooks(currentPage, itemsPerPage);
     const bookList = document.getElementById('book-list');
     bookList.innerHTML = ''; // Clear existing books
-
+    
     books.forEach(book => {
+        const remainingCount = book.numberOfCopies - book.borrowedBy.length; // Calculate remaining copies
         const bookItem = document.createElement('div');
         bookItem.className = 'book-item';
-        bookItem.innerText = `Title: ${book.title}, Author: ${book.author}`;
+        bookItem.innerHTML = `
+            Title: ${book.title}, Author: ${book.author}, Remaining: ${remainingCount} 
+            <button class="borrow-btn" onclick="borrowBook('${book._id}')">Borrow</button>
+        `;
         bookList.appendChild(bookItem);
     });
 
