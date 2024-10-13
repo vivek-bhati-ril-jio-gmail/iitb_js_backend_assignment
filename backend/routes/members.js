@@ -12,13 +12,13 @@ router.post('/', auth, async (req, res) => {
         return res.status(403).json({ msg: 'Access denied' });
     }
 
-    const { username, password, email } = req.body;
+    const { username, password, email, role} = req.body;
 
     // Basic validation
-    if (!username || !email || !password) {
+    if (!username || !email || !password || !role) {
         return res.status(400).json({ msg: 'Please provide username, email, and password' });
     }
-
+    console.log(1, username, email, password, role);
     try {
         // Check if a member with the same username or email already exists
         const existingMember = await Member.findOne({ $or: [{ username }, { email }] });
@@ -31,7 +31,9 @@ router.post('/', auth, async (req, res) => {
         const member = new Member({
             username,
             password: await bcrypt.hash(password, 10), // Hash the password
-            email
+            email,
+            isActive: true,
+            role: role
         });
 
         // Save the member to the database
@@ -50,7 +52,7 @@ router.put('/:id', auth, async (req, res) => {
         return res.status(403).json({ msg: 'Access denied' });
     }
 
-    const { password, email } = req.body;
+    const { password, email, isActive} = req.body;
     const memberId = req.params.id;
 
     // Basic validation
@@ -72,6 +74,10 @@ router.put('/:id', auth, async (req, res) => {
             member.password = await bcrypt.hash(password, 10); // Update password if provided
         }
 
+        if (isActive) {
+            member.isActive = isActive; // Update status if provided
+        }
+
         // Save the updated member to the database
         await member.save();
         return res.status(200).json({ msg: 'Member updated', member });
@@ -85,8 +91,19 @@ router.put('/:id', auth, async (req, res) => {
 router.get('/', auth, async (req, res) => {
     if (req.user.role !== 'LIBRARIAN') return res.status(403).json({ msg: 'Access denied' });
     try {
-        const members = await Member.find();
-        res.json(members);
+        const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+        const limit = parseInt(req.query.limit) || 10; // Default to limit of 10 if not provided
+
+        const skip = (page - 1) * limit; // Calculate the number of records to skip
+        const members = await Member.find().skip(skip).limit(limit);
+        const totalMembers = await Book.countDocuments(); // Get the total number of members
+
+        res.json({
+            totalUsers: totalMembers,
+            totalPages: Math.ceil(totalMembers / limit),
+            currentPage: page,
+            users: members,
+        });
     } catch (err) {
         res.status(500).json({ msg: 'Error fetching members' });
     }

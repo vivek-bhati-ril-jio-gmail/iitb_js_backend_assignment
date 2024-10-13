@@ -19,24 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (response.ok) {
                 localStorage.setItem('jwt', data.jwt); // Store the JWT in local storage
-                // Show role-specific button
-                const roleButtonContainer = document.getElementById('role-specific-btn-container');
-                if (data.role === 'LIBRARIAN') {
-                    const librarianButton = document.createElement('button');
-                    librarianButton.textContent = 'Go to Librarian Dashboard';
-                    librarianButton.addEventListener('click', () => {
-                        window.location.href = '../librarian/librarian-dashboard.html'; // Adjust the path accordingly
-                    });
-                    roleButtonContainer.appendChild(librarianButton);
-                } else if (data.role === 'MEMBER') {
-                    const memberButton = document.createElement('button');
-                    memberButton.textContent = 'Go to Member Dashboard';
-                    memberButton.addEventListener('click', () => {
-                        window.location.href = 'users-books.html'; // Adjust the path accordingly
-                    });
-                    roleButtonContainer.appendChild(memberButton);
-                }
-
+                // Store user role in local storage
+                localStorage.setItem('userRole', data.role);
                 window.location.href = '../users/users.html'; // Navigate to the appropriate dashboard
             } else {
                 alert(data.msg || 'Invalid credentials.'); // Show error message

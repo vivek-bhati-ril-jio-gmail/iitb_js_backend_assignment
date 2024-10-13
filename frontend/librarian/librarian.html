@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../global.css">
+    <script src="../global.js" defer></script> <!-- Include the header script -->
+    <script src="./js/librarian.js" defer></script> <!-- Include the librarian script -->
+    <title>Librarian Dashboard</title>
+</head>
+<body>
+    <div id="header-container"></div> <!-- Placeholder for the header -->
+
+    <h1>Librarian Dashboard</h1>
+
+    <div class="button-container">
+        <button id="create-user-btn">Create User</button>
+        <button id="get-users-btn">Get Users List</button>
+        <button id="create-book-btn">Create Book</button>
+        <button id="get-books-btn">Get Books List</button>
+    </div>
+
+    <script>
+        document.getElementById('create-user-btn').addEventListener('click', () => {
+            window.location.href = 'create-user.html';
+        });
+
+        document.getElementById('get-users-btn').addEventListener('click', () => {
+            window.location.href = 'manage-users.html';
+        });
+
+        document.getElementById('create-book-btn').addEventListener('click', () => {
+            window.location.href = 'create-book.html';
+        });
+
+        document.getElementById('get-books-btn').addEventListener('click', () => {
+            window.location.href = 'manage-books.html';
+        });
+    </script>
+</body>
+</html>

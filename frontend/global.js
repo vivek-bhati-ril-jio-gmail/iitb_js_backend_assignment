@@ -23,7 +23,7 @@ async function loadHeader() {
             if (response.ok) {
                 localStorage.removeItem('jwt');
                 alert('Successfully logged out');
-                window.location.href = '../frontend/login.html'; // Redirect to login page
+                window.location.href = '/'; // Redirect to login page
             } else {
                 const data = await response.json();
                 alert(data.msg || 'Logout failed. Please try again.');

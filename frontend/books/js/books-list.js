@@ -52,17 +52,41 @@ async function loadBooks() {
     const { totalBooks, totalPages, books } = await fetchBooks(currentPage, itemsPerPage);
     const bookList = document.getElementById('book-list');
     bookList.innerHTML = ''; // Clear existing books
-    
-    books.forEach(book => {
-        const remainingCount = book.numberOfCopies - book.borrowedBy.length; // Calculate remaining copies
-        const bookItem = document.createElement('div');
-        bookItem.className = 'book-item';
-        bookItem.innerHTML = `
-            Title: ${book.title}, Author: ${book.author}, Remaining: ${remainingCount} 
-            <button class="borrow-btn" onclick="borrowBook('${book._id}')">Borrow</button>
-        `;
-        bookList.appendChild(bookItem);
-    });
+
+    // Create header row
+    const headerRow = document.createElement('li');
+    headerRow.className = 'book-list-header';
+    headerRow.innerHTML = `
+        <div>Title</div>
+        <div>Author</div>
+        <div>Remaining Count</div>
+        <div>Actions</div>
+    `;
+    bookList.appendChild(headerRow);
+
+    if (books.length === 0) {
+        const noResultsItem = document.createElement('li');
+        noResultsItem.textContent = 'No results found';
+        noResultsItem.style.textAlign = 'center';
+        noResultsItem.style.padding = '15px';
+        bookList.appendChild(noResultsItem);
+    } else {
+        books.forEach(book => {
+            const remainingCount = book.numberOfCopies - book.borrowedBy.length;
+
+            const bookItem = document.createElement('li');
+            bookItem.className = 'book-item';
+            bookItem.innerHTML = `
+                <div>${book.title}</div>
+                <div>${book.author}</div>
+                <div>${remainingCount}</div>
+                <div class="button-container">
+                    <button class="borrow-btn" onclick="borrowBook('${book._id}')">Borrow</button>
+                </div>
+            `;
+            bookList.appendChild(bookItem);
+        });
+    }
 
     updatePagination(totalPages);
 }
