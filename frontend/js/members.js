@@ -5,7 +5,7 @@ document.getElementById('memberForm').addEventListener('submit', async (e) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'x-auth-token': localStorage.getItem('jwt')
             },
             body: JSON.stringify({
                 username: document.getElementById('username').value,
@@ -25,7 +25,7 @@ async function loadMembers() {
     try {
         const response = await fetch('http://localhost:5000/api/members', {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'x-auth-token': localStorage.getItem('jwt')
             }
         });
         const members = await response.json();

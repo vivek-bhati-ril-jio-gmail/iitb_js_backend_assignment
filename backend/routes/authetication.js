@@ -38,16 +38,21 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ msg: 'Invalid credentials' });
         }
 
+        // Create and sign the JWT
+        const token = jwt.sign({ user: { id: user.id } }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
         // Check if the user is a librarian
         if (user.role === 'LIBRARIAN') {
-            return res.json({ role: 'LIBRARIAN' }); // Return role as librarian
+            var response = { jwt: token, role: 'LIBRARIAN'};
+            return res.json(response); // Return role as librarian
         }
 
         // If not a librarian, check if the user is a member
         const member = await Members.findOne({ username });
 
         if (member) {
-            return res.json({ role: 'MEMBER' }); // Return role as member
+            var response = { jwt: token, role: 'MEMBER'};
+            return res.json(response); // Return role as member
         } else {
             return res.status(401).json({ msg: 'Invalid credentials' });
         }

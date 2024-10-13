@@ -52,9 +52,7 @@ router.get('/', async (req, res) => {
 // Borrow a Book (Member Only)
 router.post('/borrow/:bookId', auth, async (req, res) => {
     const bookId = req.params;
-    const memberId = req.user._id;
-    // Ensure the logged-in user matches the member ID
-    if (req.user.id !== memberId) return res.status(403).json({ msg: 'Access denied' });
+    const memberId = req.user.id;
 
     try {
         const book = await Book.findById(bookId);
@@ -87,12 +85,8 @@ router.post('/borrow/:bookId', auth, async (req, res) => {
 
 // Return a Book (Member Only)
 router.post('/return/:bookId', auth, async (req, res) => {
-    const bookId = req.params;
-    const memberId = req.user._id;
-
-    // Ensure the logged-in user matches the member ID
-    if (req.user.id !== memberId) return res.status(403).json({ msg: 'Access denied' });
-
+    const bookId = req.params.bookId;
+    const memberId = req.user.id;
     try {
         const book = await Book.findById(bookId);
         if (!book || book.numberOfCopies <= 0 || !book.borrowedBy.includes(memberId)) {
@@ -110,7 +104,7 @@ router.post('/return/:bookId', auth, async (req, res) => {
         member.history.push({ bookId, action: 'RETURNED' });
         await member.save();
 
-        res.json({ msg: 'Book returned', book });
+        res.json({ msg: 'Book returned', title: book.title });
     } catch (err) {
         res.status(500).json({ msg: 'Error returning book' });
     }
@@ -119,7 +113,6 @@ router.post('/return/:bookId', auth, async (req, res) => {
 // GET borrowed books for the logged-in user
 router.get('/borrowed-books', auth, async (req, res) => {
     try {
-        console.log(req.user);
         const userId = req.user.id; // Assuming you are using a middleware to set req.user based on authenticated user
         const user = await Members.findById(userId).populate('borrowedBooks'); // Populate borrowedBooks to get book details
 

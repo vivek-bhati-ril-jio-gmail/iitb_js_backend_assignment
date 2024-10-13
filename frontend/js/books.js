@@ -5,7 +5,7 @@ document.getElementById('bookForm').addEventListener('submit', async (e) => {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'x-auth-token': localStorage.getItem('jwt')
             },
             body: JSON.stringify({
                 title: document.getElementById('title').value,

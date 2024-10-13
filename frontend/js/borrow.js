@@ -4,7 +4,7 @@ document.getElementById('borrowForm').addEventListener('submit', async (e) => {
         const response = await fetch(`/api/members/${document.getElementById('memberId').value}/borrow/${document.getElementById('bookId').value}`, {
             method: 'POST',
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
+                'x-auth-token': localStorage.getItem('jwt')
             }
         });
         const data = await response.json();

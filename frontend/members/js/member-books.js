@@ -3,7 +3,8 @@ async function borrowBook(bookId) {
         const response = await fetch(`http://localhost:5000/api/books/borrow/${bookId}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-auth-token': localStorage.getItem('jwt')
             }
         });
 
@@ -24,7 +25,8 @@ async function returnBook(bookId) {
         const response = await fetch(`http://localhost:5000/api/books/return/${bookId}`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-auth-token': localStorage.getItem('jwt')
             }
         });
 
@@ -41,6 +43,7 @@ async function returnBook(bookId) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log('dowdd');
     await fetchBorrowedBooks();
 });
 
@@ -50,10 +53,9 @@ async function fetchBorrowedBooks() {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
-                // Include any necessary authentication tokens here
+                'x-auth-token': localStorage.getItem('jwt')
             }
         });
-        console.log(response);
 
         if (response.ok) {
             const borrowedBooks = await response.json();
@@ -64,7 +66,6 @@ async function fetchBorrowedBooks() {
                 listItem.classList.add('list-group-item');
                 listItem.innerHTML = `
                     ${book.title}
-                    <button class="btn btn-success btn-sm float-right ml-2" onclick="borrowBook('${book._id}')">Borrow</button>
                     <button class="btn btn-danger btn-sm float-right" onclick="returnBook('${book._id}')">Return</button>
                 `;
                 bookList.appendChild(listItem);

@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const response = await fetch('http://localhost:5000/api/auth/login', { // Adjust the URL based on your backend
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ username, password })
             });
@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (response.ok) {
+                localStorage.setItem('jwt', data.jwt); // Store the JWT in local storage
                 if (data.role === 'LIBRARIAN') {
                     window.location.href = '../librarian/librarian.html'; // Navigate to librarian dashboard
                 } else if (data.role === 'MEMBER') {
