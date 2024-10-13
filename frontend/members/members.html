@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/scripts.css">
+    <title>Home Page</title>
+</head>
+<body>
+    <h1>Welcome to the Library</h1>
+    <button id="memberDashboardBtn">Go to Member Dashboard</button>
+
+    <script>
+        document.getElementById('memberDashboardBtn').addEventListener('click', () => {
+            window.location.href = 'member-books.html'; // Change to the actual path of your Member Dashboard HTML
+        });
+    </script>
+</body>
+</html>

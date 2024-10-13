@@ -3,6 +3,7 @@ require('dotenv').config();
 const Book = require('../models/books'); 
 const Member = require('../models/members'); 
 const User = require('../models/users'); 
+const bcrypt = require('bcryptjs');
 
 async function seedDatabase() {
     try {
@@ -28,7 +29,7 @@ async function seedDatabase() {
         for (let i = 1; i <= 100; i++) {
             membersToSeed.push({
                 username: `member${i}`,
-                password: `password`, 
+                password: await bcrypt.hash('password', 10), 
                 email: `member${i}@example.com`,
                 borrowedBooks: [],
                 history: [],
@@ -171,24 +172,33 @@ async function seedDatabase() {
             await member.save(); // Save updated member
         }
 
-
         // Seed Users collection (Librarians and Members)
         console.log('Seeding Users collection...');
         const users = [];
         users.push({
             username: 'librarian1',
-            password: 'librarianPassword',
+            password: await bcrypt.hash('librarianPassword', 10),
             role: 'LIBRARIAN'
         });
         for (let i = 1; i <= 10; i++) {
             users.push({
                 username: `memberUser${i}`,
-                password: `memberPassword`, 
+                password: await bcrypt.hash('memberPassword', 10), 
                 role: 'MEMBER'
             });
         }
         await User.insertMany(users);
         console.log(`${users.length} users inserted`);
+
+        // Add all members to User collection as members
+        // Add all members to User collection as members
+        const memberUsers = await Promise.all(members.map(async (member) => ({
+            username: member.username,
+            password: await bcrypt.hash(member.password, 10), // Hash the password correctly
+            role: 'MEMBER'
+        })));
+        await User.insertMany(memberUsers);
+        console.log(`${memberUsers.length} member users inserted`);
 
     } catch (error) {
         console.error('Error during seeding:', error.message);

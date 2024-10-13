@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Books</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="./js/books.js" defer></script>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2>Manage Books</h2>
+        <form id="bookForm">
+            <div class="form-group">
+                <label for="title">Title:</label>
+                <input type="text" class="form-control" id="title" required>
+            </div>
+            <div class="form-group">
+                <label for="author">Author:</label>
+                <input type="text" class="form-control" id="author" required>
+            </div>
+            <div class="form-group">
+                <label for="numberOfCopies">Number of Copies:</label>
+                <input type="number" class="form-control" id="numberOfCopies" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Book</button>
+        </form>
+        <div id="booksList" class="mt-4"></div>
+    </div>
+</body>
+</html>
