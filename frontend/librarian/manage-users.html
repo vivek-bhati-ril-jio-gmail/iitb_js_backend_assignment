@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/manage-users.css">
+    <script src="../global.js" defer></script>
+    <script src="./js/manage-users.js" defer></script>
+    <title>Manage Users</title>
+</head>
+<body>
+    <div id="header-container"></div>
+    <h1>Manage Users</h1>
+
+    <label for="items-per-page">Items per page:</label>
+    <select id="items-per-page">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+    </select>
+
+    <div class="user-list-header"></div>
+    <ul id="user-list" class="user-list"></ul>
+
+    <div id="pagination">
+        <button id="prev-btn" disabled>Previous</button>
+        <span id="page-info"></span>
+        <button id="next-btn">Next</button>
+    </div>
+
+    <div id="user-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>User Details</h2>
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="email" id="email" placeholder="Email" required>
+            <label for="user-status">Status:</label>
+            <select id="user-status">
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+            </select>
+            <button id="updateUserBtn">Update User</button>
+        </div>
+    </div>
+
+    <div id="user-history-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn-history">&times;</span>
+            <h2>User History</h2>
+            <div class="user-history-list-header"></div>
+            <ul id="user-history-list" class="user-history-list"></ul>
+        </div>
+    </div>    
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+    <link rel="stylesheet" href="./css/books-list.css">
+    <script src="../global.js" defer></script>
+    <script src="./js/books-list.js" defer></script>
+</head>
+<body>
+    <div id="header-container"></div>
+    <h1>Available Books</h1>
+    
+    <label for="items-per-page">Items per page:</label>
+    <select id="items-per-page">
+        <option value="10">10</option>
+        <option value="15">15</option>
+        <option value="20">20</option>
+    </select>
+
+    <div id="book-list-header"></div>
+    <div id="book-list" class="book-list"></div>
+    
+    <div id="pagination">
+        <button id="prev-btn" disabled>Previous</button>
+        <span id="page-info"></span>
+        <button id="next-btn">Next</button>
+    </div>
+</body>
+</html>

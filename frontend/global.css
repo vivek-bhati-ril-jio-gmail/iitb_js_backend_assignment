@@ -1,0 +1,100 @@
+/* Reset some default browser styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+/* Header Styles */
+#header {
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    padding: 0;
+    text-align: center;
+}
+
+#header h1 {
+    margin-bottom: 10px;
+}
+
+/* Button Styles */
+button {
+    background-color: #4CAF50; /* Green */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 10px 5px; /* Margin between buttons */
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+/* Container Styles */
+.button-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows wrapping of buttons */
+    justify-content: center; /* Center buttons */
+    margin: 20px 0; /* Margin above and below the button container */
+}
+
+h1 {
+    margin: 20px 0; /* Margin above and below headings */
+    text-align: center;
+}
+
+/* List Styles */
+ul {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0;
+}
+
+.list-group-item {
+    background-color: white;
+    border: 1px solid #ddd;
+    margin: 10px 0; /* Space between list items */
+    padding: 15px; /* Padding inside list items */
+    border-radius: 5px;
+    transition: box-shadow 0.3s ease;
+}
+
+.list-group-item:hover {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Shadow effect on hover */
+}
+
+/* Form Styles */
+form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px auto; /* Center the form */
+    max-width: 400px; /* Max width for form */
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"] {
+    width: 100%; /* Full width inputs */
+    padding: 10px;
+    margin: 10px 0; /* Space between inputs */
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    button {
+        width: 100%; /* Full width buttons on small screens */
+    }
+}

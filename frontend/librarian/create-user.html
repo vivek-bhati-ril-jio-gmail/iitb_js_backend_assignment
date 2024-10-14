@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../global.css">
+    <script src="../global.js" defer></script> <!-- Include any necessary scripts -->
+    <script src="./js/create-user.js" defer></script>
+    <title>Create User</title>
+</head>
+<body>
+    <div id="header-container"></div> <!-- Placeholder for the header -->
+
+    <h1>Create New User</h1>
+    <form id="create-user-form">
+        <div>
+            <label for="username">Username (required):</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div>
+            <label for="email">Email (required):</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="password">Password (required):</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <label for="role">Role:</label>
+            <select id="role" name="role">
+                <option value="MEMBER">Member</option>
+                <option value="LIBRARIAN">Librarian</option>
+            </select>
+        </div>
+        <button type="submit">Create User</button>
+    </form>
+</body>
+</html>
