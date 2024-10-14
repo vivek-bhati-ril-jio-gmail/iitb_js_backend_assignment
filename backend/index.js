@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const path = require('path');
 const connectDB = require('./config/connection');
 const authRoutes = require('./routes/authetication');
 const bookRoutes = require('./routes/books');
