@@ -66,7 +66,7 @@ function displayUsers(users, totalPages) {
                 <div class="button-container">
                     <button onclick="openModal('${user._id}', '${user.username}', '${user.email}')">Edit</button>
                     <button onclick="deleteUser('${user._id}')">Delete</button>
-                    <button onclick="openUserHistoryModal('${user.history}')">History</button>
+                    <button onclick='openUserHistoryModal(${JSON.stringify(user.history).replace(/'/g, "\\'")})'>History</button>
                 </div>
             `;
             userList.appendChild(listItem);
@@ -99,54 +99,36 @@ function openUserHistoryModal(historyList) {
         <div>Book ID</div>
         <div>Action</div>
         <div>Date</div>
+        <div>Time</div>
     `;
     userHistoryList.appendChild(historyHeaderRow);
 
-    // Check if historyList is empty or undefined
-    if (!historyList || historyList.length === 0) {
-        const noResultsItem = document.createElement('li');
-        noResultsItem.textContent = 'No results found';
-        noResultsItem.style.textAlign = 'center';
-        noResultsItem.style.padding = '15px';
-        userHistoryList.appendChild(noResultsItem);
-        userHistoryModal.style.display = 'block'; // Show modal even if no results
-        return; // Exit early
-    }
-
-    // Check if historyList is a string and parse it if so
-    let parsedHistoryList;
-    if (typeof historyList === 'string') {
-        try {
-            parsedHistoryList = JSON.parse(historyList);
-        } catch (error) {
-            console.error('Error parsing history list:', error);
-            alert('Failed to load user history. Please try again.');
-            return;
+    // Check if historyList is an array
+    if (Array.isArray(historyList)) {
+        if (historyList.length === 0) {
+            const noResultsItem = document.createElement('li');
+            noResultsItem.textContent = 'No results found';
+            noResultsItem.style.textAlign = 'center';
+            noResultsItem.style.padding = '15px';
+            userHistoryList.appendChild(noResultsItem);
+        } else {
+            historyList.forEach(history => {
+                const listItem = document.createElement('li');
+                // Create a Date object
+                const dateTime = new Date(history.date);
+                listItem.innerHTML = `
+                    <div>${history.bookId}</div>
+                    <div>${history.action}</div>
+                    <div>${dateTime.toLocaleDateString()}</div>
+                    <div>${dateTime.toLocaleTimeString()}</div>
+                `;
+                userHistoryList.appendChild(listItem);
+            });
         }
-    } else if (Array.isArray(historyList)) {
-        parsedHistoryList = historyList;
     } else {
         console.error('Invalid history list format:', historyList);
         alert('Invalid history data.');
         return;
-    }
-
-    if (parsedHistoryList.length === 0) {
-        const noResultsItem = document.createElement('li');
-        noResultsItem.textContent = 'No results found';
-        noResultsItem.style.textAlign = 'center';
-        noResultsItem.style.padding = '15px';
-        userHistoryList.appendChild(noResultsItem);
-    } else {
-        parsedHistoryList.forEach(history => {
-            const listItem = document.createElement('li');
-            listItem.innerHTML = `
-                <div>${history.bookId}</div>
-                <div>${history.action}</div>
-                <div>${history.date}</div>
-            `;
-            userHistoryList.appendChild(listItem);
-        });
     }
     userHistoryModal.style.display = 'block';
 }

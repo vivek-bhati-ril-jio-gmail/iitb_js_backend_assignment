@@ -70,6 +70,7 @@ button:hover {
     margin-left: 10px;
 }
 
+/* Modal styles */
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -85,13 +86,18 @@ button:hover {
 
 .modal-content {
     background-color: #fff; /* White background */
-    margin: 5% auto; /* Center the modal */
+    margin: auto; /* Center the modal */
     padding: 20px;
     border-radius: 8px; /* Rounded corners */
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
-    max-width: 500px; /* Maximum width */
-    width: 90%; /* Responsive width */
+    display: flex; /* Use flexbox for alignment */
+    flex-direction: column; /* Stack children vertically */
+    align-items: center; /* Center content horizontally */
+    min-width: 300px; /* Optional: Minimum width for smaller content */
+    max-width: 30%; /* Optional: Max width for larger screens */
     position: relative; /* Position for the close button */
+    top: 50%; /* Position from the top */
+    transform: translateY(-50%); /* Center vertically */
 }
 
 .close-btn {

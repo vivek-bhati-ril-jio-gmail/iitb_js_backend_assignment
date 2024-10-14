@@ -49,29 +49,35 @@ async function displayBooks(books, totalPages) {
     `;
     bookList.appendChild(headerRow);
 
-    if (books.length === 0) {
-        const noResultsItem = document.createElement('li');
-        noResultsItem.textContent = 'No results found';
-        noResultsItem.style.textAlign = 'center';
-        noResultsItem.style.padding = '15px';
-        bookList.appendChild(noResultsItem);
+    // Check if historyList is an array
+    if (Array.isArray(books)) {
+        if (books.length === 0) {
+            const noResultsItem = document.createElement('li');
+            noResultsItem.textContent = 'No results found';
+            noResultsItem.style.textAlign = 'center';
+            noResultsItem.style.padding = '15px';
+            bookList.appendChild(noResultsItem);
+        } else {
+            books.forEach(book => {
+                const remainingCount = book.numberOfCopies - book.borrowedBy.length;
+                const bookItem = document.createElement('li');
+                bookItem.className = 'book-item';
+                bookItem.innerHTML = `
+                    <div>${book.title}</div>
+                    <div>${book.author}</div>
+                    <div>${remainingCount}</div>
+                    <div class="button-container">
+                        <button class="edit-btn" onclick="openModal('${book._id}', '${book.title}', '${book.author}', '${book.numberOfCopies}')">Edit</button>
+                        <button onclick="deleteBook('${book._id}')">Delete</button>
+                    </div>
+                `;
+                bookList.appendChild(bookItem);
+            });
+        }
     } else {
-        books.forEach(book => {
-            const remainingCount = book.numberOfCopies - book.borrowedBy.length;
-
-            const bookItem = document.createElement('li');
-            bookItem.className = 'book-item';
-            bookItem.innerHTML = `
-                <div>${book.title}</div>
-                <div>${book.author}</div>
-                <div>${remainingCount}</div>
-                <div class="button-container">
-                    <button class="edit-btn" onclick="openModal('${book._id}', '${book.title}', '${book.author}', '${book.numberOfCopies}')">Edit</button>
-                    <button onclick="deleteBook('${book._id}')">Delete</button>
-                </div>
-            `;
-            bookList.appendChild(bookItem);
-        });
+        console.error('Invalid books list format:', books);
+        alert('Invalid books data.');
+        return;
     }
 
     updatePagination(totalPages);
