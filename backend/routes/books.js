@@ -7,11 +7,22 @@ const router = express.Router();
 // Add a Book (Librarian Only)
 router.post('/', auth, async (req, res) => {
     if (req.user.role !== 'LIBRARIAN') return res.status(403).json({ msg: 'Access denied' });
-    const { title, author } = req.body;
+    const { title, author, numberOfCopies } = req.body;
+
+    if (!title || !author || !numberOfCopies) {
+        return res.status(400).json({ msg: 'Please provide title, author, and number of copies.' });
+    }
     try {
-        const book = new Book({ title, author });
+        console.log(title, author, numberOfCopies);
+        const book = new Book({ 
+            title: title,
+            author: author,
+            status: 'AVAILABLE',
+            numberOfCopies: numberOfCopies,
+            borrowedBy: []
+        });
         await book.save();
-        res.status(201).json(book);
+        res.status(201).json({ book:book, msg: 'Book added successfully'});
     } catch (err) {
         res.status(500).json({ msg: 'Error adding book' });
     }
@@ -33,7 +44,7 @@ router.delete('/:id', auth, async (req, res) => {
     if (req.user.role !== 'LIBRARIAN') return res.status(403).json({ msg: 'Access denied' });
     try {
         await Book.findByIdAndDelete(req.params.id);
-        res.json({ msg: 'Book removed' });
+        res.json({ msg: 'Book has been removed.' });
     } catch (err) {
         res.status(500).json({ msg: 'Error removing book' });
     }

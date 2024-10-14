@@ -126,9 +126,19 @@ updateBookBtn.addEventListener('click', async () => {
 // Delete User
 async function deleteBook(id) {
     if (confirm('Are you sure you want to delete this book?')) {
-        await fetch(`http://localhost:5000/api/books/${id}`, {
-            method: 'DELETE'
+        const response = await fetch(`http://localhost:5000/api/books/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': localStorage.getItem('jwt')
+            }
         });
+        const data = await response.json();
+        if (response.ok) {
+            alert(data.msg);
+        } else {
+            alert(data.msg || 'Error fetching books list.');
+        }
         loadBooks(currentPage);
     }
 }
@@ -147,13 +157,13 @@ function updatePagination(totalPages) {
 document.getElementById('prev-btn').addEventListener('click', () => {
     if (currentPage > 1) {
         currentPage--;
-        loadBooks();
+        loadBooks(currentPage);
     }
 });
 
 document.getElementById('next-btn').addEventListener('click', () => {
     currentPage++;
-    loadBooks();
+    loadBooks(currentPage);
 });
 
 // Handle items per page selection

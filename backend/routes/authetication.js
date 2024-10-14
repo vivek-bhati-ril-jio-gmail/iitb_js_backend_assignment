@@ -28,35 +28,21 @@ router.post('/login', async (req, res) => {
         const user = await Members.findOne({ username });
 
         if (!user) {
-            return res.status(401).json({ msg: 'Invalid credentials' });
+            return res.status(401).json({ msg: 'Invalid username' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password); // Assuming you hash passwords
         // const isMatch = password == user.password;
 
         if (!isMatch) {
-            return res.status(401).json({ msg: 'Invalid credentials' });
+            return res.status(401).json({ msg: 'Invalid password' });
         }
 
         // Create and sign the JWT
         const token = jwt.sign({ user: { id: user.id } }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-        // Check if the user is a librarian
-        if (user.role === 'LIBRARIAN') {
-            var response = { jwt: token, role: 'LIBRARIAN'};
-            return res.json(response); // Return role as librarian
-        }
-
-        // If not a librarian, check if the user is a member
-        const member = await Members.findOne({ username });
-
-        if (member) {
-            var response = { jwt: token, role: 'MEMBER'};
-            return res.json(response); // Return role as member
-        } else {
-            return res.status(401).json({ msg: 'Invalid credentials' });
-        }
-
+        var response = { jwt: token, role: user.role};
+        return res.json(response);
     } catch (err) {
         console.error(err);
         res.status(500).json({ msg: 'Server error' });
