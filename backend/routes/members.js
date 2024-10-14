@@ -109,8 +109,18 @@ router.get('/', auth, async (req, res) => {
 router.delete('/:id', auth, async (req, res) => {
     if (req.user.role !== 'LIBRARIAN') return res.status(403).json({ msg: 'Access denied' });
     try {
-        await Member.findByIdAndDelete(req.params.id);
-        res.json({ msg: 'Member removed' });
+        const memberId = req.params.id;
+        // Find the member by ID
+        const member = await Member.findById(memberId);
+        if (!member) {
+            return res.status(404).json({ msg: 'Member not found.' });
+        }
+        if (member.role !== 'LIBRARIAN') {
+            await Member.findByIdAndDelete(memberId);
+            res.status(200).json({ msg: 'Member removed.' });
+        } else {
+            res.status(200).json({ msg: 'Librarians cannot be removed.' });
+        }
     } catch (err) {
         res.status(500).json({ msg: 'Error removing member' });
     }

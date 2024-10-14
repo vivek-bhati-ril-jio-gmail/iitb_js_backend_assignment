@@ -170,9 +170,15 @@ updateUserBtn.addEventListener('click', async () => {
 // Delete User
 async function deleteUser(id) {
     if (confirm('Are you sure you want to delete this user?')) {
-        await fetch(`http://localhost:5000/api/users/${id}`, {
-            method: 'DELETE'
+        const response = await fetch(`http://localhost:5000/api/members/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'x-auth-token': localStorage.getItem('jwt')
+            },
         });
+        const data = await response.json();
+        alert(data.msg);
         loadUsers(currentPage);
     }
 }
