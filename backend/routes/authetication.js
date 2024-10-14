@@ -6,16 +6,34 @@ const router = express.Router();
 
 // Sign Up
 router.post('/signup', async (req, res) => {
-    const { username, password, role } = req.body;
+    const { username, password, email, role } = req.body;
+    // Basic validation
+    if (!username || !email || !password || !role) {
+        return res.status(400).json({ msg: 'Please provide username, email, and password' });
+    }
+    
     try {
-        password = await bcrypt.hash(password, 10);
-        const user = new Members({
-            username,
-            password: password,
-            role
+        // Check if a member with the same username or email already exists
+        const existingMember = await Members.findOne({ $or: [{ username }, { email }] });
+
+        if (existingMember) {
+            return res.status(400).json({ msg: 'Member with this username or email already exists' });
+        }
+
+        // Create a new member
+        const member = new Members({
+            username: username,
+            password: await bcrypt.hash(password, 10), // Hash the password
+            email: email,
+            borrowedBooks: [],
+            history: [],
+            isActive: true,
+            role: role
         });
-        await user.save();
-        res.status(201).json({ msg: 'User created' });
+
+        // Save the member to the database
+        await member.save();
+        return res.status(201).json({ msg: 'User created', member });
     } catch (err) {
         res.status(500).json({ msg: 'Error creating user' });
     }

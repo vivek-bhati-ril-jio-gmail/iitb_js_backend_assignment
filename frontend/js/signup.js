@@ -15,6 +15,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
         });
         const data = await response.json();
         if (response.ok) {
+            alert(data.msg);
             // Handle successful signup (e.g., redirect to login)
             window.location.href = 'login.html';
         } else {

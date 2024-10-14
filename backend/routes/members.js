@@ -18,7 +18,6 @@ router.post('/', auth, async (req, res) => {
     if (!username || !email || !password || !role) {
         return res.status(400).json({ msg: 'Please provide username, email, and password' });
     }
-    console.log(1, username, email, password, role);
     try {
         // Check if a member with the same username or email already exists
         const existingMember = await Member.findOne({ $or: [{ username }, { email }] });
