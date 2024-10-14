@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = document.getElementById('password').value;
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/login', { // Adjust the URL based on your backend
+            const response = await fetch('https://iitb-project-09adefc1d972.herokuapp.com/api/auth/login', { // Adjust the URL based on your backend
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

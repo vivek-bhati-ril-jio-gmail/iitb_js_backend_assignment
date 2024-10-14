@@ -1,7 +1,7 @@
 document.getElementById('memberForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch('http://localhost:5000/api/members', {
+        const response = await fetch('https://iitb-project-09adefc1d972.herokuapp.com/api/members', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ document.getElementById('memberForm').addEventListener('submit', async (e) => {
 
 async function loadMembers() {
     try {
-        const response = await fetch('http://localhost:5000/api/members', {
+        const response = await fetch('https://iitb-project-09adefc1d972.herokuapp.com/api/members', {
             headers: {
                 'x-auth-token': localStorage.getItem('jwt')
             }

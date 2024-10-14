@@ -12,7 +12,7 @@ async function loadHeader() {
     // Add logout functionality
     document.getElementById('logout-btn').addEventListener('click', async () => {
         try {
-            const response = await fetch('http://localhost:5000/api/auth/logout', {
+            const response = await fetch('https://iitb-project-09adefc1d972.herokuapp.com/api/auth/logout', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
