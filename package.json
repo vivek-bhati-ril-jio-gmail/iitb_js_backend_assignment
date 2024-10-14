@@ -5,7 +5,7 @@
     "scripts": {
         "start": "node backend/index.js",
         "serve": "http-server -c-0 ./frontend",
-        "heroku-postbuild": "cp -r frontend/* ./frontend",
+        "heroku-postbuild": "npm install --prefix frontend",
         "dev": "nodemon index.js"
     },
     "dependencies": {
