@@ -29,9 +29,11 @@ router.post('/', auth, async (req, res) => {
 
         // Create a new member
         const member = new Member({
-            username,
+            username: username,
             password: await bcrypt.hash(password, 10), // Hash the password
-            email,
+            email: email,
+            borrowedBooks: [],
+            history: [],
             isActive: true,
             role: role
         });
@@ -52,12 +54,12 @@ router.put('/:id', auth, async (req, res) => {
         return res.status(403).json({ msg: 'Access denied' });
     }
 
-    const { password, email, isActive} = req.body;
+    const { username, email, isActive } = req.body;
     const memberId = req.params.id;
 
     // Basic validation
-    if (!email) {
-        return res.status(400).json({ msg: 'Please provide email' });
+    if (!username || !email || !isActive) {
+        return res.status(400).json({ msg: 'Please provide correct details' });
     }
 
     try {
@@ -68,15 +70,9 @@ router.put('/:id', auth, async (req, res) => {
         }
 
         // Update member details
+        member.username = username; // Update username
         member.email = email; // Update email
-
-        if (password) {
-            member.password = await bcrypt.hash(password, 10); // Update password if provided
-        }
-
-        if (isActive) {
-            member.isActive = isActive; // Update status if provided
-        }
+        member.isActive = isActive === 'active' ? true : false; // Update active status
 
         // Save the updated member to the database
         await member.save();
@@ -96,7 +92,7 @@ router.get('/', auth, async (req, res) => {
 
         const skip = (page - 1) * limit; // Calculate the number of records to skip
         const members = await Member.find().skip(skip).limit(limit);
-        const totalMembers = await Book.countDocuments(); // Get the total number of members
+        const totalMembers = await Member.countDocuments(); // Get the total number of members
 
         res.json({
             totalUsers: totalMembers,

@@ -7,6 +7,7 @@ const emailInput = document.getElementById('email');
 const updateUserBtn = document.getElementById('updateUserBtn');
 const toggleActiveBtn = document.getElementById('toggleActiveBtn');
 const pagination = document.getElementById('pagination');
+const isActiveInput = document.getElementById('user-status');
 let currentUserId = '';
 let currentPage = 1;
 let usersPerPage = 10;
@@ -152,22 +153,15 @@ updateUserBtn.addEventListener('click', async () => {
     const updatedUser = {
         username: usernameInput.value,
         email: emailInput.value,
+        isActive: isActiveInput.value
     };
     await fetch(`http://localhost:5000/api/members/${currentUserId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
+            'x-auth-token': localStorage.getItem('jwt')
         },
         body: JSON.stringify(updatedUser)
-    });
-    loadUsers(currentPage);
-    userModal.style.display = 'none';
-});
-
-// Toggle Active Status
-toggleActiveBtn.addEventListener('click', async () => {
-    await fetch(`http://localhost:5000/api/users/${currentUserId}/toggle`, {
-        method: 'PATCH'
     });
     loadUsers(currentPage);
     userModal.style.display = 'none';
