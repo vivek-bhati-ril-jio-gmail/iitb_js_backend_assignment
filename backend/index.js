@@ -19,6 +19,8 @@ const app = express();
 // Use CORS
 app.use(cors());
 app.use(express.json()); // For parsing application/json
+// Serve static files from the frontend directory
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Home route for checking server
 app.get('/', (req, res) => {
@@ -32,9 +34,6 @@ app.use('/api/members', memberRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
-
-// Serve static files from the frontend directory
-app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Define your API routes here
 
