@@ -4,8 +4,8 @@
     "description": "A full-stack library management system",
     "scripts": {
         "start": "node backend/index.js",
-        "serve": "http-server -c-1 ./frontend",
-        "heroku-postbuild": "npm install --prefix frontend && npm run build --prefix frontend",
+        "serve": "http-server -c-0 ./frontend",
+        "heroku-postbuild": "cp -r frontend/* ./frontend",
         "dev": "nodemon index.js"
     },
     "dependencies": {
