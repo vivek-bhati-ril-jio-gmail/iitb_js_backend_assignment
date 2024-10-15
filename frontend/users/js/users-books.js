@@ -1,6 +1,6 @@
 async function borrowBook(bookId) {
     try {
-        const response = await fetch(`https://iitb-project-09adefc1d972.herokuapp.com/api/books/borrow/${bookId}`, {
+        const response = await fetch(`http://localhost:5000/api/books/borrow/${bookId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -23,7 +23,7 @@ async function borrowBook(bookId) {
 
 async function returnBook(bookId) {
     try {
-        const response = await fetch(`https://iitb-project-09adefc1d972.herokuapp.com/api/books/return/${bookId}`, {
+        const response = await fetch(`http://localhost:5000/api/books/return/${bookId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function fetchBorrowedBooks() {
     try {
-        const response = await fetch('https://iitb-project-09adefc1d972.herokuapp.com/api/books/borrowed-books', { // Adjust the URL as needed
+        const response = await fetch('http://localhost:5000/api/books/borrowed-books', { // Adjust the URL as needed
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

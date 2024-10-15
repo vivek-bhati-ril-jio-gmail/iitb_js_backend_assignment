@@ -15,7 +15,7 @@ let usersPerPage = 10;
 // Load Users Function
 async function loadUsers(page) {
     try {
-        const response = await fetch(`https://iitb-project-09adefc1d972.herokuapp.com/api/members?page=${page}&limit=${usersPerPage}`, {
+        const response = await fetch(`http://localhost:5000/api/members?page=${page}&limit=${usersPerPage}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -155,7 +155,7 @@ updateUserBtn.addEventListener('click', async () => {
         email: emailInput.value,
         isActive: isActiveInput.value
     };
-    await fetch(`https://iitb-project-09adefc1d972.herokuapp.com/api/members/${currentUserId}`, {
+    await fetch(`http://localhost:5000/api/members/${currentUserId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -170,7 +170,7 @@ updateUserBtn.addEventListener('click', async () => {
 // Delete User
 async function deleteUser(id) {
     if (confirm('Are you sure you want to delete this user?')) {
-        const response = await fetch(`https://iitb-project-09adefc1d972.herokuapp.com/api/members/${id}`, {
+        const response = await fetch(`http://localhost:5000/api/members/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

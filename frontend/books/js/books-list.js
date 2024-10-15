@@ -1,4 +1,4 @@
-const apiUrl = 'https://iitb-project-09adefc1d972.herokuapp.com/api/books'; // Update with your API endpoint
+const apiUrl = 'http://localhost:5000/api/books'; // Update with your API endpoint
 let currentPage = 1;
 let itemsPerPage = 10; // Default value
 

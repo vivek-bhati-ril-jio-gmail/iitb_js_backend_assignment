@@ -1,4 +1,4 @@
-const apiUrl = 'https://iitb-project-09adefc1d972.herokuapp.com/api/books'; // Update with your API endpoint
+const apiUrl = 'http://localhost:5000/api/books'; // Update with your API endpoint
 const bookList = document.getElementById('book-list');
 const bookModal = document.getElementById('book-modal');
 const bookHistoryList = document.getElementById('book-history-list');
@@ -166,7 +166,7 @@ updateBookBtn.addEventListener('click', async () => {
         author: authorInput.value,
         numberOfCopies: numberOfCopiesInput.value
     };
-    await fetch(`https://iitb-project-09adefc1d972.herokuapp.com/api/books/${currentBookId}`, { // Corrected line
+    await fetch(`http://localhost:5000/api/books/${currentBookId}`, { // Corrected line
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -181,7 +181,7 @@ updateBookBtn.addEventListener('click', async () => {
 // Delete User
 async function deleteBook(id) {
     if (confirm('Are you sure you want to delete this book?')) {
-        const response = await fetch(`https://iitb-project-09adefc1d972.herokuapp.com/api/books/${id}`, {
+        const response = await fetch(`http://localhost:5000/api/books/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

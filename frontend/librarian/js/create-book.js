@@ -6,7 +6,7 @@ document.getElementById('create-book-form').addEventListener('submit', async (e)
     const numberOfCopies = document.getElementById('numberOfCopies').value;
 
     try {
-        const response = await fetch('https://iitb-project-09adefc1d972.herokuapp.com/api/books', { // Adjust the URL to your backend
+        const response = await fetch('http://localhost:5000/api/books', { // Adjust the URL to your backend
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
