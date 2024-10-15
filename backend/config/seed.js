@@ -83,6 +83,7 @@ async function seedDatabase() {
                     await randomMember.save();
 
                     // Add the member ID to the book's borrowedBy list if not already present
+                    const borrowDate = new Date();
                     if (!insertedBook.borrowedBy.includes(randomMember._id)) {
                         insertedBook.borrowedBy.push({
                             userID: randomMember._id,
@@ -92,7 +93,6 @@ async function seedDatabase() {
                     }
 
                     // Add a BORROWED action to the member's history
-                    const borrowDate = new Date();
                     randomMember.history.push({
                         bookId: bookId,
                         action: 'BORROWED',

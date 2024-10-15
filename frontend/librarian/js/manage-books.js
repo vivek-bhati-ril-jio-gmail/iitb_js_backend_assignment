@@ -101,7 +101,7 @@ document.querySelector('.close-btn').addEventListener('click', () => {
 });
 
 // Open Modal for User History
-function openUserHistoryModal(historyList) {
+function openBookHistoryModal(historyList) {
     bookHistoryList.innerHTML = ''; // Clear existing users
 
     // Create header row for history
