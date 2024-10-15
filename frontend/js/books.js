@@ -31,10 +31,25 @@ async function loadBooks() {
         const booksList = document.getElementById('booksList');
         booksList.innerHTML = '<h4>Books List</h4>';
         books.forEach(book => {
-            booksList.innerHTML += `<div>${book.title} by ${book.author} - Available: ${book.numberOfCopies}</div>`;
+            const numberOfCopies = getAvailableCount(books.borrowedBy, book.numberOfCopies);
+            booksList.innerHTML += `<div>${book.title} by ${book.author} - Available: ${numberOfCopies}</div>`;
         });
     } catch (error) {
         console.error('Error:', error);
     }
 }
+
+function getAvailableCount(borrowedBy, numberOfCopies) {
+    // Count how many times 'BORROWED' appears in the array
+    const borrowedCount = borrowedBy.filter(borrow => borrow.action === 'BORROWED').length;
+    
+    // Count how many times 'RETURNED' appears in the array
+    const returnedCount = borrowedBy.filter(borrow => borrow.action === 'RETURNED').length;
+
+    // Calculate available count
+    const availableCount = numberOfCopies - (borrowedCount - returnedCount);
+    
+    return availableCount;
+}
+
 loadBooks(); // Load books on page load
