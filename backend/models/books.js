@@ -17,12 +17,4 @@ BookSchema.methods.isBorrowedByUser = function(memberId) {
     return this.borrowedBy.some(borrow => borrow.userID.equals(memberId));
 };
 
-// Method to get the difference between BORROWED and RETURNED
-BookSchema.methods.getAvailableCount = function() {
-    const borrowedCount = this.borrowedBy.filter(borrow => borrow.action === 'BORROWED').length;
-    const returnedCount = this.borrowedBy.filter(borrow => borrow.action === 'RETURNED').length;
-
-    return this.numberOfCopies - (borrowedCount - returnedCount); // Difference between borrowed and returned
-};
-
 module.exports = mongoose.model('Book', BookSchema); // Changed model name to 'Book' for consistency
