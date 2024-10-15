@@ -5,6 +5,7 @@
     "scripts": {
         "start": "node backend/index.js",
         "serve": "http-server -c-0 ./frontend",
+        "start-and-serve": "node pause.js",
         "heroku-postbuild": "npm install --prefix frontend",
         "dev": "nodemon index.js"
     },
