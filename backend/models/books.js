@@ -12,4 +12,9 @@ const BookSchema = new mongoose.Schema({
     }] // Change to an array of ObjectIds
 });
 
+// Method to find if a book is borrowed by a specific user
+BookSchema.methods.isBorrowedByUser = function(memberId) {
+    return this.borrowedBy.some(borrow => borrow.userID.equals(memberId));
+};
+
 module.exports = mongoose.model('Book', BookSchema); // Changed model name to 'Book' for consistency
