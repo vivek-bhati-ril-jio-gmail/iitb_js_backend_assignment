@@ -5,7 +5,11 @@ const BookSchema = new mongoose.Schema({
     author: { type: String, required: true },
     status: { type: String, enum: ['AVAILABLE', 'BORROWED'], default: 'AVAILABLE' },
     numberOfCopies: { type: Number, required: true, default: 1 }, // New attribute
-    borrowedBy: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Member' }] // Change to an array of ObjectIds
+    borrowedBy: [{
+        userID: { type: mongoose.Schema.Types.ObjectId, ref: 'Member' },
+        action: { type: String, enum: ['BORROWED', 'RETURNED'] },
+        date: { type: Date, default: Date.now }
+    }] // Change to an array of ObjectIds
 });
 
 module.exports = mongoose.model('Book', BookSchema); // Changed model name to 'Book' for consistency

@@ -65,9 +65,9 @@ function displayUsers(users, totalPages) {
                 <div>${user.email}</div>
                 <div>${user.isActive ? 'Active' : 'Inactive'}</div>
                 <div class="button-container">
+                    <button onclick='openUserHistoryModal(${JSON.stringify(user.history).replace(/'/g, "\\'")})'>History</button>
                     <button onclick="openModal('${user._id}', '${user.username}', '${user.email}')">Edit</button>
                     <button onclick="deleteUser('${user._id}')">Delete</button>
-                    <button onclick='openUserHistoryModal(${JSON.stringify(user.history).replace(/'/g, "\\'")})'>History</button>
                 </div>
             `;
             userList.appendChild(listItem);

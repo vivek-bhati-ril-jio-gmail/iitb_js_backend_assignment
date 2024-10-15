@@ -30,13 +30,15 @@ button:hover {
     background-color: #0056b3;
 }
 
-.book-list {
+.book-list,
+.book-history-list {
     list-style-type: none;
     padding: 0;
     width: 100%;
 }
 
-.book-list li {
+.book-list li,
+.book-history-list li {
     background: white;
     margin: 10px 0;
     padding: 15px;
@@ -46,6 +48,19 @@ button:hover {
     justify-content: space-between;
     align-items: center;
     transition: background-color 0.3s ease;
+}
+
+/* Add spacing between the elements in the same row */
+.book-history-list li div {
+    margin-right: 20px; /* Space between attributes */
+    flex: 1; /* Allow the divs to grow */
+}
+
+.book-history-list-header {
+    display: flex; /* Use flexbox for the header */
+    background: #e9ecef; /* Light background for header */
+    font-weight: bold; /* Make the text bold */
+    border-bottom: 2px solid #007bff; /* Bottom border for distinction */
 }
 
 .book-list li.header {
@@ -67,6 +82,33 @@ button:hover {
 }
 
 .book-list li .button-container button {
+    margin-left: 10px;
+}
+
+.header-item {
+    flex: 1; /* Make each item take equal space */
+    padding: 10px; /* Add padding for better spacing */
+    text-align: center; /* Center-align text */
+}
+
+/* Optional: Adjust hover effect for header */
+.book-history-list-header:hover {
+    background-color: #d3d3d3; /* Change color on hover */
+}
+
+.book-history-list li:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.book-history-list li:hover {
+    background-color: #f1f1f1;
+}
+
+.book-history-list li div:last-child {
+    margin-right: 0; /* Remove margin from the last item */
+}
+
+.book-history-list li .button-container button {
     margin-left: 10px;
 }
 
@@ -100,7 +142,29 @@ button:hover {
     transform: translateY(-50%); /* Center vertically */
 }
 
-.close-btn {
+/* Style for the user history list in the modal */
+.book-history-list {
+    list-style-type: none; /* Remove default list styling */
+    padding: 0;
+    margin: 0; /* Remove default margin */
+}
+
+.book-history-list li {
+    display: flex; /* Use flexbox for layout */
+    justify-content: space-between; /* Space between items */
+    align-items: center; /* Center items vertically */
+    padding: 15px; /* Padding for list items */
+    border-bottom: 1px solid #ccc; /* Separator line */
+}
+
+/* Header item styles for the modal */
+.book-history-list-header {
+    background: #e9ecef; /* Light background for header */
+    font-weight: bold; /* Make the text bold */
+}
+
+.close-btn,
+.close-btn-history {
     color: #aaa;
     font-size: 28px;
     font-weight: bold;
@@ -110,7 +174,9 @@ button:hover {
 }
 
 .close-btn:hover,
-.close-btn:focus {
+.close-btn:focus,
+.close-btn-history:hover,
+.close-btn-history:focus {
     color: #000; /* Darker color on hover */
     cursor: pointer;
 }

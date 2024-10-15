@@ -1,6 +1,8 @@
 const apiUrl = 'https://iitb-project-09adefc1d972.herokuapp.com/api/books'; // Update with your API endpoint
 const bookList = document.getElementById('book-list');
 const bookModal = document.getElementById('book-modal');
+const bookHistoryList = document.getElementById('book-history-list');
+const bookHistoryModal = document.getElementById('book-history-modal');
 const titleInput = document.getElementById('title');
 const authorInput = document.getElementById('author');
 const numberOfCopiesInput = document.getElementById('numberOfCopies');
@@ -67,6 +69,7 @@ async function displayBooks(books, totalPages) {
                     <div>${book.author}</div>
                     <div>${remainingCount}</div>
                     <div class="button-container">
+                        <button onclick='openBookHistoryModal(${JSON.stringify(book.borrowedBy).replace(/'/g, "\\'")})'>History</button>
                         <button class="edit-btn" onclick="openModal('${book._id}', '${book.title}', '${book.author}', '${book.numberOfCopies}')">Edit</button>
                         <button onclick="deleteBook('${book._id}')">Delete</button>
                     </div>
@@ -97,10 +100,62 @@ document.querySelector('.close-btn').addEventListener('click', () => {
     bookModal.style.display = 'none'; // Hide the modal when close button is clicked
 });
 
+// Open Modal for User History
+function openUserHistoryModal(historyList) {
+    bookHistoryList.innerHTML = ''; // Clear existing users
+
+    // Create header row for history
+    const historyHeaderRow = document.createElement('li');
+    historyHeaderRow.className = 'user-history-list-header'; // Use the header class for styling
+    historyHeaderRow.innerHTML = `
+        <div>User ID</div>
+        <div>Action</div>
+        <div>Date</div>
+        <div>Time</div>
+    `;
+    bookHistoryList.appendChild(historyHeaderRow);
+
+    // Check if historyList is an array
+    if (Array.isArray(historyList)) {
+        if (historyList.length === 0) {
+            const noResultsItem = document.createElement('li');
+            noResultsItem.textContent = 'No results found';
+            noResultsItem.style.textAlign = 'center';
+            noResultsItem.style.padding = '15px';
+            bookHistoryList.appendChild(noResultsItem);
+        } else {
+            historyList.forEach(history => {
+                const listItem = document.createElement('li');
+                // Create a Date object
+                const dateTime = new Date(history.date);
+                listItem.innerHTML = `
+                    <div>${history.userID}</div>
+                    <div>${history.action}</div>
+                    <div>${dateTime.toLocaleDateString()}</div>
+                    <div>${dateTime.toLocaleTimeString()}</div>
+                `;
+                bookHistoryList.appendChild(listItem);
+            });
+        }
+    } else {
+        console.error('Invalid history list format:', historyList);
+        alert('Invalid history data.');
+        return;
+    }
+    bookHistoryModal.style.display = 'block';
+}
+
+// Close Modal
+document.querySelector('.close-btn-history').addEventListener('click', () => {
+    bookHistoryModal.style.display = 'none';
+});
+
 // Close modal when clicking outside of it
 window.addEventListener('click', (event) => {
     if (event.target === bookModal) {
         bookModal.style.display = 'none'; // Hide the modal if clicking outside of it
+    } else if (event.target === bookHistoryModal) {
+        bookHistoryModal.style.display = 'none'; // Hide the modal if clicking outside of it
     }
 });
 

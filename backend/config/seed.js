@@ -84,7 +84,11 @@ async function seedDatabase() {
 
                     // Add the member ID to the book's borrowedBy list if not already present
                     if (!insertedBook.borrowedBy.includes(randomMember._id)) {
-                        insertedBook.borrowedBy.push(randomMember._id);
+                        insertedBook.borrowedBy.push({
+                            userID: randomMember._id,
+                            action: 'BORROWED',
+                            date: borrowDate
+                        });
                     }
 
                     // Add a BORROWED action to the member's history
@@ -130,7 +134,7 @@ async function seedDatabase() {
                     const bookIndex = Math.floor(Math.random() * borrowedBooksCount);
                     const borrowedBookId = member.borrowedBooks[bookIndex];
                     const existingHistoryEntry = member.history.filter(entry => entry.bookId.equals(borrowedBookId));
-                    
+                    const insertedBookTemp = await Book.findById(borrowedBookId);
                     let returnDate = new Date(); // Should be after the borrow date
 
                     if (existingHistoryEntry.length > 0) {
@@ -144,10 +148,22 @@ async function seedDatabase() {
                                 action: 'RETURNED',
                                 date: returnDate
                             });
+                            // Update the history of the book also
+                            insertedBookTemp.borrowedBy.push({
+                                userID: member._id,
+                                action: 'RETURNED',
+                                date: returnDate
+                            });
                         } else {
                             // If last entry was RETURNED, add BORROWED entry (to maintain the odd count)
                             member.history.push({
                                 bookId: borrowedBookId,
+                                action: 'BORROWED',
+                                date: returnDate
+                            });
+                            // Update the history of the book also
+                            insertedBookTemp.borrowedBy.push({
+                                userID: member._id,
                                 action: 'BORROWED',
                                 date: returnDate
                             });
@@ -156,6 +172,12 @@ async function seedDatabase() {
                         // If no existing entry, assume it was borrowed and return it
                         member.history.push({
                             bookId: borrowedBookId,
+                            action: 'RETURNED',
+                            date: returnDate
+                        });
+                        // Update the history of the book also
+                        insertedBookTemp.borrowedBy.push({
+                            userID: member._id,
                             action: 'RETURNED',
                             date: returnDate
                         });
