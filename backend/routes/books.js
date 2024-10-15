@@ -91,7 +91,10 @@ router.post('/borrow/:bookId', auth, async (req, res) => {
             book.status = 'BORROWED';
         }
 
-        book.borrowedBy.push(memberId); // Add the member ID to the borrowedBy list
+        book.borrowedBy.push({
+            userID: memberId,
+            action: 'BORROWED'
+        }); // Add the member ID to the borrowedBy list
         await book.save();
 
         // Update member's borrowedBooks
