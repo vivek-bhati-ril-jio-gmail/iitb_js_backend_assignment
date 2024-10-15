@@ -82,7 +82,7 @@ router.post('/borrow/:bookId', auth, async (req, res) => {
         if (!book
             || book.status === 'BORROWED'
             || book.numberOfCopies <= 0
-            || book.borrowedBy.includes(memberId)) {
+            || book.isBorrowedByUser(memberId)) {
             return res.status(400).json({ msg: 'Book not available or already borrowed by the user' });
         }
 
@@ -115,13 +115,16 @@ router.post('/return/:bookId', auth, async (req, res) => {
     const memberId = req.user.id;
     try {
         const book = await Book.findById(bookId);
-        if (!book || book.numberOfCopies <= 0 || !book.borrowedBy.includes(memberId)) {
+        if (!book || book.numberOfCopies <= 0 || !book.isBorrowedByUser(memberId)) {
             return res.status(400).json({ msg: 'Book not borrowed or not available' });
         }
 
         // Update book status
         book.status = 'AVAILABLE';
-        book.borrowedBy = book.borrowedBy.filter(id => id.toString() !== memberId); // Remove the member ID from the borrowedBy list
+        book.borrowedBy.push({
+            userID: memberId,
+            action: 'RETURNED'
+        }); // Add the member ID to the borrowedBy list
         await book.save();
 
         // Update member's borrowedBooks

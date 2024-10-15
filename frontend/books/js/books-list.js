@@ -72,8 +72,7 @@ async function loadBooks() {
         bookList.appendChild(noResultsItem);
     } else {
         books.forEach(book => {
-            const remainingCount = book.numberOfCopies - book.borrowedBy.length;
-
+            const remainingCount = getAvailableCount(book.borrowedBy, book.numberOfCopies);
             const bookItem = document.createElement('li');
             bookItem.className = 'book-item';
             bookItem.innerHTML = `
@@ -120,6 +119,19 @@ document.getElementById('items-per-page').addEventListener('change', (event) => 
     currentPage = 1; // Reset to the first page
     loadBooks();
 });
+
+function getAvailableCount(borrowedBy, numberOfCopies) {
+    // Count how many times 'BORROWED' appears in the array
+    const borrowedCount = borrowedBy.filter(borrow => borrow.action === 'BORROWED').length;
+    
+    // Count how many times 'RETURNED' appears in the array
+    const returnedCount = borrowedBy.filter(borrow => borrow.action === 'RETURNED').length;
+
+    // Calculate available count
+    const availableCount = numberOfCopies - (borrowedCount - returnedCount);
+    
+    return availableCount;
+}
 
 // Initial load
 loadBooks();
